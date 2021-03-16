@@ -46,7 +46,7 @@ class User(db.Model):
     lastname = db.Column(db.String(100))
     description = db.Column(db.Text())
     token = db.Column(db.String(250))
-    user_lists = db.relationship('List',order_by='List.list_id',lazy=True)
+    user_lists = db.relationship('List',order_by='List.list_id')
 
 
     def __init__(self, email,
@@ -95,7 +95,7 @@ class Item(db.Model):
     favorite = db.Column(db.Boolean)
     stores = db.Column(db.ARRAY(db.String()))
     barcode = db.Column(db.String(500))
-    lists = db.relationship('List', backref='Items', lazy=True)
+    lists = db.relationship('List', backref='Items')
 
     def __repr__(self):
         return f'<Item {self.name}: ID {self.item_id}>'
@@ -129,7 +129,7 @@ class List(db.Model):
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
     complete = db.Column(db.Boolean)
-    list_items = db.relationship('Item', order_by='Item.item_id', lazy=True)
+    list_items = db.relationship('Item', order_by='Item.item_id')
 
     def __init__(self, list_name, user_id, description=""):
         # self.list_id = list_id
