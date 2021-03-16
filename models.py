@@ -36,6 +36,60 @@ def db_create_all():
 Models
 '''
 
+class User(db.Model):
+    __tablename__ = 'users'
+    # username = db.Column(db.String(50), primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(250), unique=True)
+    password = db.Column(db.String(250))
+    firstname = db.Column(db.String(100))
+    lastname = db.Column(db.String(100))
+    description = db.Column(db.Text())
+    token = db.Column(db.String(250))
+    user_lists = \
+        db.relationship(
+            'List',
+            order_by='List.list_id',
+            cascade='delete,all'
+            )
+
+
+    def __init__(self, email,
+                 password, firstname="",
+                 lastname="", description=""):
+        # self.username = username
+        self.email = email
+        self.password = password
+        self.firstname = firstname
+        self.lastname = lastname
+        self.description = description
+        self.token = ""
+
+    def add(self):
+        """
+        This method add a new record to the database
+        :return:
+        """
+        db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def update():
+        """
+        This method update a new record to the database
+        :return:
+        """
+        db.session.commit()
+
+    def delete(self):
+        """
+        This method deletes a record from the database
+        :return:
+        """
+        db.session.delete(self)
+        db.session.commit()
+
+
 class Item(db.Model):
     __tablename__ = 'item'
 
