@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, db_create_all, return_db
+from models import setup_db, db_create_all, return_db, Item, List, Store
 
 def create_app(test_config=None):
   # create and configure the app
@@ -19,9 +19,22 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS')
   return response
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-  return 'Healthy'
+  try:
+    lists = Item.query.all()
+    data = [item.long() for item in lists]
+    return jsonify(
+      {
+        'success':True,
+        'data': data
+      }
+    )
+
+  except Exception as e:
+    print(e)
+    abort(404)
+  
 
 @app.route('/auth')
 def auth():

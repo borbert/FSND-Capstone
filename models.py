@@ -1,6 +1,6 @@
 import os
 from sqlalchemy import Column, String, create_engine
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, jsonify
 from flask_migrate import Migrate
 
 database_name = os.getenv('DATABASE_NAME',default='listapp_dev')
@@ -55,14 +55,35 @@ class List(db.Model):
     __tablename__ = 'list'
 
     id = db.Column(db.Integer, primary_key=True)
-    prod_id = db.Column(db.Integer, db.ForeignKey('item.id'))
+    items = db.relationship('Item', backref='items', lazy=True)
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
     complete = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<List {}{}>'.format(self.prod_id, self.store_id)
+        return f'<List {self.id}-{self.items}>'
+
+    '''
+    create a new list
+    '''
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+    
+    def long(self):
+        return jsonify(
+            {
+                'id':self.id,
+                'items':self.items,
+                'store_id':self.store_id,
+                'complete':self.complete,
+                'date_completed':self.date_completed,
+            }
+        )
 
 class Store(db.Model):
     __tablename__ = 'store'
@@ -80,4 +101,4 @@ class Store(db.Model):
     lists = db.relationship('List', backref='Stores', lazy=True)
 
     def __repr__(self):
-        return '<Artist {}>'.format(self.name)
+        return f'<Artist {self.name}>'
