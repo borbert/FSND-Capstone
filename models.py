@@ -46,12 +46,7 @@ class User(db.Model):
     lastname = db.Column(db.String(100))
     description = db.Column(db.Text())
     token = db.Column(db.String(250))
-    user_lists = \
-        db.relationship(
-            'List',
-            order_by='List.list_id',
-            cascade='delete,all'
-            )
+    user_lists = db.relationship('List',order_by='List.list_id',cascade='delete,all')
 
 
     def __init__(self, email,
@@ -134,12 +129,7 @@ class List(db.Model):
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
     complete = db.Column(db.Boolean)
-    list_items = \ 
-            db.relationship(
-                'Item', 
-                order_by='Item.item_id', 
-                cascasde='delete, all'
-                )
+    list_items = db.relationship('Item', order_by='Item.item_id', cascasde='delete, all')
 
     def __init__(self, list_name, user_id, description=""):
         # self.list_id = list_id
