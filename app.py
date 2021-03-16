@@ -19,21 +19,28 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS')
   return response
 
+'''
+Routes 
+'''
+#--------------------------Get METHODS------------------------#
 @app.route('/', methods=['GET'])
-def index():
+def all_lists():
   try:
-    lists = Item.query.all()
-    data = [item.long() for item in lists]
-    return jsonify(
-      {
-        'success':True,
-        'data': data
-      }
-    )
-
+    lists = List.query.all()
+    if lists:
+      data = [List.long() for list in lists]
+      return jsonify(
+        {
+          'success':True,
+          'data': data
+        }
+      )
+      else:
+        return "No lists created"
   except Exception as e:
     print(e)
     abort(404)
+
   
 
 @app.route('/auth')
