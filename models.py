@@ -130,11 +130,16 @@ class List(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
     list_name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text())
-    list_items = db.relationship('Item', order_by='Item.item_id', cascasde='delete, all')
     # store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
     complete = db.Column(db.Boolean)
+    list_items = \ 
+            db.relationship(
+                'Item', 
+                order_by='Item.item_id', 
+                cascasde='delete, all'
+                )
 
     def __init__(self, list_name, user_id, description=""):
         # self.list_id = list_id
