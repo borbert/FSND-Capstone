@@ -59,8 +59,7 @@ class Item(db.Model):
         db.session.commit()
 
     def long(self):
-        return 
-        {
+        return {
         'id': self.id,
         'prod_description': self.prod_description,
         'category': self.category,
@@ -94,8 +93,7 @@ class List(db.Model):
         db.session.commit()
     
     def long(self):
-        return 
-            {
+        return {
                 'id':self.id,
                 'items':self.items,
                 'store_id':self.store_id,
