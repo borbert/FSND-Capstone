@@ -76,7 +76,7 @@ class List(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
     list_name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text())
-    list_items = db.relationship('Item', order_by='Item.item_id', lazy=True)
+    list_items = db.relationship('Item', order_by='Item.item_id', cascasde='delete, all')
     # store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
