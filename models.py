@@ -146,10 +146,16 @@ class List(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-
+    
+    '''
+    update list
+    '''
     def update(self):
         db.session.commit()
-
+    
+    '''
+    delete a list
+    '''
     def delete(self):
         db.session.delete(self)
         db.session.commit()

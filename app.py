@@ -25,23 +25,7 @@ Routes
 #--------------------------Get METHODS------------------------#
 @app.route('/', methods=['GET'])
 def all_lists():
-  try:
-    lists = List.query.all()
-    if lists:
-      data = [List.long() for list in lists]
-      return jsonify(
-        {
-          'success':True,
-          'data': data
-        }
-      )
-    else:
-      return "No lists created"
-  except Exception as e:
-    print(e)
-    abort(404)
-
-  
+  return 'index where lists are'
 
 @app.route('/auth')
 def auth():
