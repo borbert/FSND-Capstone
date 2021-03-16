@@ -1,6 +1,6 @@
 import os
 from sqlalchemy import Column, String, create_engine
-from flask_sqlalchemy import SQLAlchemy, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 database_name = os.getenv('DATABASE_NAME',default='listapp_dev')
@@ -51,6 +51,25 @@ class Item(db.Model):
     def __repr__(self):
         return f'<Item {self.name}: ID {self.id}>'
 
+    '''
+    add a new item
+    '''
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def long(self):
+        return 
+        {
+        'id': self.id,
+        'prod_description': self.prod_description,
+        'category': self.category,
+        'favorite': self.favorite,
+        'stores': self.stores,
+        'lists':self.lists,
+        }
+        
+
 class List(db.Model):
     __tablename__ = 'list'
 
@@ -75,7 +94,7 @@ class List(db.Model):
         db.session.commit()
     
     def long(self):
-        return jsonify(
+        return 
             {
                 'id':self.id,
                 'items':self.items,
@@ -83,7 +102,7 @@ class List(db.Model):
                 'complete':self.complete,
                 'date_completed':self.date_completed,
             }
-        )
+        
 
 class Store(db.Model):
     __tablename__ = 'store'
