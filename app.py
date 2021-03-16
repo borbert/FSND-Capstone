@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, db_create_all, return_db, Item, List, Store
+from models import setup_db, db_create_all, return_db, Item, List, User
 
 def create_app(test_config=None):
   # create and configure the app
