@@ -39,7 +39,7 @@ Models
 class Item(db.Model):
     __tablename__ = 'item'
 
-    id = Column(db.Integer, primary_key=True)
+    item_id = Column(db.Integer, primary_key=True)
     prod_description = db.Column(db.String)
     category = db.Column(db.ARRAY(db.String()))
     image_link = db.Column(db.String(500))
@@ -49,7 +49,7 @@ class Item(db.Model):
     lists = db.relationship('List', backref='Items', lazy=True)
 
     def __repr__(self):
-        return f'<Item {self.name}: ID {self.id}>'
+        return f'<Item {self.name}: ID {self.item_id}>'
 
     '''
     add a new item
@@ -70,17 +70,26 @@ class Item(db.Model):
         
 
 class List(db.Model):
-    __tablename__ = 'list'
+    __tablename__ = 'lists'
 
-    id = db.Column(db.Integer, primary_key=True)
-    items = db.relationship('Item', backref='items', lazy=True)
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
+    list_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
+    list_name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text())
+    list_items = db.relationship('Item', order_by='Item.item_id', lazy=True)
+    # store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
     complete = db.Column(db.Boolean)
 
+    def __init__(self, list_name, user_id, description=""):
+        # self.list_id = list_id
+        self.list_name = list_name
+        self.user_id = user_id
+        self.description = description
+
     def __repr__(self):
-        return f'<List {self.id}-{self.items}>'
+        return f'<List {self.id}-{self.list_name}>'
 
     '''
     create a new list
@@ -90,6 +99,10 @@ class List(db.Model):
         db.session.commit()
 
     def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
     
     def long(self):
@@ -102,20 +115,20 @@ class List(db.Model):
             }
         
 
-class Store(db.Model):
-    __tablename__ = 'store'
+# class Store(db.Model):
+#     __tablename__ = 'store'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(120))
-    phone = db.Column(db.String(120))
-    website = db.Column(db.String(120))
-    image_link = db.Column(db.String(500))
-    api = db.Column(db.Boolean)
-    favorite = db.Column(db.Boolean)
-    items = db.relationship('Item', backref='Stores', lazy=True)
-    lists = db.relationship('List', backref='Stores', lazy=True)
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String)
+#     city = db.Column(db.String(120))
+#     state = db.Column(db.String(120))
+#     phone = db.Column(db.String(120))
+#     website = db.Column(db.String(120))
+#     image_link = db.Column(db.String(500))
+#     api = db.Column(db.Boolean)
+#     favorite = db.Column(db.Boolean)
+#     items = db.relationship('Item', backref='Stores', lazy=True)
+#     lists = db.relationship('List', backref='Stores', lazy=True)
 
-    def __repr__(self):
-        return f'<Artist {self.name}>'
+#     def __repr__(self):
+#         return f'<Artist {self.name}>'

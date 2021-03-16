@@ -35,8 +35,8 @@ def all_lists():
           'data': data
         }
       )
-      else:
-        return "No lists created"
+    else:
+      return "No lists created"
   except Exception as e:
     print(e)
     abort(404)
