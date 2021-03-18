@@ -58,8 +58,9 @@ def add_item(payload):
   return 'auth implemented'
 
 @app.route('/contents')
+@requires_auth('post:store')
 def contents():
-  return 'contents Not implemented'
+  return 'contents implemented'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

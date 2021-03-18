@@ -8,6 +8,7 @@ from urllib.request import urlopen
 AUTH0_DOMAIN = 'fsnd-project3-borbert.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'listapp'
+JWKS_URL = f'https://{AUTH0_DOMAIN}/.well-known/jwks.json'
 
 ## AuthError Exception
 '''
