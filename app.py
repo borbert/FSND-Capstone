@@ -47,15 +47,15 @@ Returns:
 Known errors:
     401 Unauthorized if user lacks permission
 '''
-# @app.route('/my_lists', method=['GET'])
-# @requires_auth('get:lists')
-# def my_lists(payload):
-#   return 'auth implemented'
+@app.route('/my_lists', methods=['GET'])
+@requires_auth('get:lists')
+def my_lists(payload):
+  return 'auth implemented'
 
-# @app.route('/add_item', method=['POST'])
-# @requires_auth('post:item')
-# def add_item(payload):
-#   return 'auth implemented'
+@app.route('/add_item', methods=['POST'])
+@requires_auth('post:item')
+def add_item(payload):
+  return 'auth implemented'
 
 @app.route('/contents')
 def contents():
