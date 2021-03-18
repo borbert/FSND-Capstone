@@ -27,9 +27,10 @@ Routes
 def all_lists():
   return 'index where lists are'
 
-@app.route('/auth')
-def auth():
-  return 'auth Not implemented'
+@app.route('/add_item', method=['POST'])
+@requires_auth('post:item')
+def add_item():
+  return 'auth implemented'
 
 @app.route('/contents')
 def contents():
