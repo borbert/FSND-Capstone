@@ -9,7 +9,7 @@ def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   setup_db(app)
-  CORS(app) #, resources={r"/api/": {"origins": "*"}}
+  CORS(app,resources={r"/*": {"origins": "*"}}) 
 
   return app
 
@@ -32,9 +32,9 @@ GET / endpoint
 Returns:
     Status code 200 and list of lists.
 '''
-@app.route('/', methods=['GET'])
-def all_lists():
-  return 'index where lists are'
+@app.route('/')
+def heath_check():
+  return jsonify({'health': 'Running!!'}), 200
 
 '''
 GET /my_lists endpoint
