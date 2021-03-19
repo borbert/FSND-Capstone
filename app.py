@@ -61,7 +61,7 @@ def add_item(payload):  #
     abort(422)
   
   try:
-    item_id=body['item_id']
+    # item_id=body['item_id']
     prod_description=body['prod_description']
     category=body['category']
     favorite=body['favorite']
@@ -69,7 +69,7 @@ def add_item(payload):  #
     lists=body['lists']
 
     item = Item(
-      item_id=item_id,
+      # item_id=item_id,
       prod_description=prod_description,
       category=category,
       favorite=favorite,

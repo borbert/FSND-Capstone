@@ -14,7 +14,7 @@ def main():
             image_link = 'test link',
             favorite = True,
             stores = [1,2],
-            barcode = '0358423356',
+            barcode = '0358423356'
             # lists = [1,2,3]
         )
     )

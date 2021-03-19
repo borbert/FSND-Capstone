@@ -2,6 +2,7 @@ import os
 from sqlalchemy import Column, String, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_moment import Moment
 
 database_name = os.getenv('DATABASE_NAME',default='listapp_dev')
 db_user = os.getenv('DB_USER',default='postgres')
@@ -14,6 +15,7 @@ database_path = os.getenv(
 # "postgres://{}:{}@{}/{}".format(db_user,db_pass,db_host, database_name)
 
 db = SQLAlchemy()
+moment=Moment()
 
 '''
 setup_db(app)
@@ -23,6 +25,7 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
+    moment.app = app
     db.init_app(app)
     migrate = Migrate(app,db)
 
