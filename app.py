@@ -59,7 +59,7 @@ def add_item(payload):
 
 @app.route('/contents')
 @requires_auth('post:store')
-def contents():
+def contents(payload):
   return 'contents implemented'
 
 if __name__ == '__main__':
