@@ -88,14 +88,14 @@ class User(db.Model):
 class Item(db.Model):
     __tablename__ = 'item'
 
-    item_id = Column(db.Integer, primary_key=True)
+    item_id = Column(db.Integer, primary_key=True,autoincrement=True)
     prod_description = db.Column(db.String)
     category = db.Column(db.ARRAY(db.String()))
     image_link = db.Column(db.String(500))
     favorite = db.Column(db.Boolean)
     stores = db.Column(db.ARRAY(db.String()))
     barcode = db.Column(db.String(500))
-    lists = db.relationship('List', backref='Item')
+    # lists = db.relationship('List', backref='Item')
 
     def __repr__(self):
         return f'<Item {self.name}: ID {self.item_id}>'
@@ -109,12 +109,12 @@ class Item(db.Model):
 
     def long(self):
         return {
-        'id': self.id,
+        'item_id': self.item_id,
         'prod_description': self.prod_description,
         'category': self.category,
         'favorite': self.favorite,
         'stores': self.stores,
-        'lists':self.lists,
+        # 'lists':self.lists,
         }
         
 
@@ -129,7 +129,7 @@ class List(db.Model):
     date_added = db.Column(db.DateTime, nullable=False)
     date_completed = db.Column(db.DateTime, nullable=True)
     complete = db.Column(db.Boolean)
-    list_items = db.relationship('Item', order_by='Item.item_id')
+    # list_items = db.relationship('Item', order_by='Item.item_id')
 
     def __init__(self, list_name, user_id, description=""):
         # self.list_id = list_id

@@ -52,13 +52,45 @@ Known errors:
 def my_lists(payload):
   return 'auth implemented'
 
-@app.route('/add_item', methods=['POST'])
-@requires_auth('post:item')
-def add_item(payload):
-  return 'auth implemented'
+@app.route('/items', methods=['POST'])
+# @requires_auth('post:item')
+def add_item(payload):  #
+  body=request.get_json(payload)
+
+  if 'prod_description' not in body:
+    abort(422)
+  
+  try:
+    item_id=body['item_id']
+    prod_description=body['prod_description']
+    category=body['category']
+    favorite=body['favorite']
+    stores=body['stores']
+    lists=body['lists']
+
+    item = Item(
+      item_id=item_id,
+      prod_description=prod_description,
+      category=category,
+      favorite=favorite,
+      stores=stores,
+      lists=lists
+    )
+    item.insert()
+  
+    return jsonify({
+      'success':True,
+      'items': [item.long()]
+    }), 200
+  
+  except Exception as e:
+    print(e)
+    abort(422)
+    
+  
 
 @app.route('/contents')
-@requires_auth('post:store')
+# @requires_auth('post:store')
 def contents(payload):
   return 'contents implemented'
 
