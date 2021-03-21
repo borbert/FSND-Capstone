@@ -1,8 +1,8 @@
-import os
+import os, json
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, db_create_all, return_db, Item, List, User
+from models import setup_db, db_drop_and_create_all, setup_db, Actor, Movies
 from auth import requires_auth
 
 def create_app(test_config=None):
@@ -14,6 +14,7 @@ def create_app(test_config=None):
   return app
 
 app = create_app()
+
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Headers','Content-Type, Authorization')
@@ -54,37 +55,7 @@ def my_lists(payload):
 @app.route('/items', methods=['POST'])
 # @requires_auth('post:item')
 def add_item(payload):  #
-  body=request.get_json(payload)
-
-  if 'prod_description' not in body:
-    abort(422)
-  
-  try:
-    # item_id=body['item_id']
-    prod_description=body['prod_description']
-    category=body['category']
-    favorite=body['favorite']
-    stores=body['stores']
-    lists=body['lists']
-
-    item = Item(
-      # item_id=item_id,
-      prod_description=prod_description,
-      category=category,
-      favorite=favorite,
-      stores=stores,
-      lists=lists
-    )
-    item.insert()
-  
-    return jsonify({
-      'success':True,
-      'items': [item.long()]
-    }), 200
-  
-  except Exception as e:
-    print(e)
-    abort(422)
+  pass
     
   
 
@@ -94,4 +65,4 @@ def contents(payload):
   return 'contents implemented'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
