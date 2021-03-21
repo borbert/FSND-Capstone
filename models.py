@@ -1,10 +1,10 @@
 import os
-from sqlalchemy import Column, String, create_engine
+from sqlalchemy import Column, String, Integer, ForeignKey, Float, Date
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_moment import Moment
 
-database_name = os.getenv('DATABASE_NAME',default='listapp_dev')
+database_name = os.getenv('DATABASE_NAME',default='casting_app')
 db_user = os.getenv('DB_USER',default='postgres')
 db_pass = os.getenv('DB_PASS',default=None)
 db_host = os.getenv('DB_HOST', default='localhost')
@@ -32,36 +32,41 @@ def setup_db(app, database_path=database_path):
 def return_db():
     return db
     
-def db_create_all():
+def db_drop_and_create_all():
+    """
+    drops the database tables and starts fresh
+    can be used to initialize a clean database
+    """
+    db.drop_all()
     db.create_all()
+
+actor_in_movie = db.Table(
+    'actor_in_movie',
+    Column('actor_id', Integer, ForeignKey('actors.id'), primary_key=True),
+    Column('movie_id', Integer, ForeignKey('movies.id'), primary_key=True)
+)
 
 '''
 Models
 '''
 
-class User(db.Model):
-    __tablename__ = 'users'
-    # username = db.Column(db.String(50), primary_key=True)
-    user_id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(250), unique=True)
-    password = db.Column(db.String(250))
-    firstname = db.Column(db.String(100))
-    lastname = db.Column(db.String(100))
-    description = db.Column(db.Text())
-    token = db.Column(db.String(250))
-    user_lists = db.relationship('List',backref='User')
+class Movies(db.Model):
+    __tablename__ = "movies"
 
+    id = Column(Integer, primary_key=True)
+    title = Column(String(256), nullable=False)
+    release_year = Column(Integer, nullable=False)
+    duration = Column(Integer, nullable=False)
+    imdb_rating = Column(Float, nullable=False)
+    cast = db.relationship('Actor', secondary=actor_in_movie,
+                           backref=db.backref('movies', lazy=True))
 
-    def __init__(self, email,
-                 password, firstname="",
-                 lastname="", description=""):
-        # self.username = username
-        self.email = email
-        self.password = password
-        self.firstname = firstname
-        self.lastname = lastname
-        self.description = description
-        self.token = ""
+    def __init__(self, title, release_year, duration, imdb_rating):
+        self.title = title
+        self.release_year = release_year
+        self.duration = duration
+        self.imdb_rating = imdb_rating
+
 
     def add(self):
         """
@@ -71,8 +76,7 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    @staticmethod
-    def update():
+    def update(self):
         """
         This method update a new record to the database
         :return:
@@ -87,106 +91,89 @@ class User(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-
-class Item(db.Model):
-    __tablename__ = 'item'
-
-    item_id = Column(db.Integer, primary_key=True,autoincrement=True)
-    prod_description = db.Column(db.String)
-    category = db.Column(db.ARRAY(db.String()))
-    image_link = db.Column(db.String(500))
-    favorite = db.Column(db.Boolean)
-    stores = db.Column(db.ARRAY(db.String()))
-    barcode = db.Column(db.String(500))
-    # lists = db.relationship('List', backref='Item')
-
-    def __repr__(self):
-        return f'<Item {self.name}: ID {self.item_id}>'
-
-    '''
-    add a new item
-    '''
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
+    def short(self):
+        return {
+            'id':self.id,
+            'title':self.title,
+            'release_year':self.release_year
+        }
 
     def long(self):
         return {
-        'item_id': self.item_id,
-        'prod_description': self.prod_description,
-        'category': self.category,
-        'favorite': self.favorite,
-        'stores': self.stores,
-        # 'lists':self.lists,
+            "title": self.title,
+            "duration": self.duration,
+            "release_year": self.release_year,
+            "imdb_rating": self.imdb_rating
         }
-        
 
-class List(db.Model):
-    __tablename__ = 'lists'
-
-    list_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
-    list_name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text())
-    # store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
-    date_added = db.Column(db.DateTime, nullable=False)
-    date_completed = db.Column(db.DateTime, nullable=True)
-    complete = db.Column(db.Boolean)
-    # list_items = db.relationship('Item', order_by='Item.item_id')
-
-    def __init__(self, list_name, user_id, description=""):
-        # self.list_id = list_id
-        self.list_name = list_name
-        self.user_id = user_id
-        self.description = description
+    def full_info(self):
+        return {
+            "title": self.title,
+            "duration": self.duration,
+            "release_year": self.release_year,
+            "imdb_rating": self.imdb_rating,
+            "cast": [actor.name for actor in self.cast]
+        }
 
     def __repr__(self):
-        return f'<List {self.id}-{self.list_name}>'
+        return "<Movie {} {} {} {} />".format(
+            self.title,
+            self.release_year,
+            self.imdb_rating, 
+            self.duration
+        )
 
-    '''
-    create a new list
-    '''
+    
+
+
+class Actor(db.Model):
+    __tablename__ = "actors"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(256), nullable=False)
+    full_name = Column(String(512), nullable=False, default='')
+    date_of_birth = Column(Date, nullable=False)
+
+    def __init__(self, name, full_name, date_of_birth):
+        self.name = name
+        self.full_name = full_name
+        self.date_of_birth = date_of_birth
+
     def insert(self):
         db.session.add(self)
         db.session.commit()
-    
-    '''
-    update list
-    '''
-    def update(self):
-        db.session.commit()
-    
-    '''
-    delete a list
-    '''
+
     def delete(self):
         db.session.delete(self)
         db.session.commit()
-    
+
+    def update(self):
+        db.session.commit()
+
+    def short(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
     def long(self):
         return {
-                'id':self.id,
-                'items':self.items,
-                'store_id':self.store_id,
-                'complete':self.complete,
-                'date_completed':self.date_completed,
-            }
-        
+            "name": self.name,
+            "full_name": self.full_name,
+            "date_of_birth": self.date_of_birth.strftime("%B %d, %Y")
+        }
 
-# class Store(db.Model):
-#     __tablename__ = 'store'
+    def full_info(self):
+        return {
+            "name": self.name,
+            "full_name": self.full_name,
+            "date_of_birth": self.date_of_birth.strftime("%B %d, %Y"),
+            "movies": [movie.title for movie in self.movies]
+        }
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String)
-#     city = db.Column(db.String(120))
-#     state = db.Column(db.String(120))
-#     phone = db.Column(db.String(120))
-#     website = db.Column(db.String(120))
-#     image_link = db.Column(db.String(500))
-#     api = db.Column(db.Boolean)
-#     favorite = db.Column(db.Boolean)
-#     items = db.relationship('Item', backref='Stores', lazy=True)
-#     lists = db.relationship('List', backref='Stores', lazy=True)
-
-#     def __repr__(self):
-#         return f'<Artist {self.name}>'
+    def __repr__(self):
+        return "<Movie {} {} {} />".format(
+            self.name, 
+            self.full_name,
+            self.date_of_birth
+        )

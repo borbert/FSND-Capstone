@@ -27,8 +27,7 @@ Routes
 '''
 GET / endpoint
     This is a public endpoint that represents the list model with the short() description method.
-    This returns status code 200 and json {"success": True, "lists": lists} where list is the
-    list of lists.
+    This returns status code 200 and json {'health': 'Running!!'}.
 Returns:
     Status code 200 and list of lists.
 '''
