@@ -318,7 +318,7 @@ def update_movie(payload, movie_id):
                 or request_body["imdb_rating"] > 10:
           raise ValueError
 
-      movie.imdb_rating = request_body["imdb_rating"]
+        movie.imdb_rating = request_body["imdb_rating"]
 
     if "cast" in request_body:
       if len(request_body["cast"]) == 0:
@@ -348,7 +348,7 @@ def update_movie(payload, movie_id):
 @app.route('/movies/<int:movie_id>', methods=['DELETE'])
 @requires_auth("delete:movie")
 def delete_movie(payload, movie_id):
-  movie = Movie.query.get_or_404(movie_id)
+  movie = Movies.query.get_or_404(movie_id)
 
   try:
     movie.delete()
