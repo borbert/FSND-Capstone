@@ -1,9 +1,9 @@
 import os
-from sqlalchemy import Column, String, Integer, ForeignKey, Float, Date, Table
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy import Column, String, Integer, ForeignKey, Float, Date, Table
 
-database_name = os.getenv('DATABASE_NAME',default='casting_app')
+database_name = os.getenv('DATABASE_NAME',default='agency_app')
 db_user = os.getenv('DB_USER',default='postgres')
 db_pass = os.getenv('DB_PASS',default=None)
 db_host = os.getenv('DB_HOST', default='localhost')
