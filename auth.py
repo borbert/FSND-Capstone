@@ -7,7 +7,7 @@ from urllib.request import urlopen
 
 AUTH0_DOMAIN = 'fsnd-project3-borbert.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'agencyapp'
+API_AUDIENCE = 'http://127.0.0.1:5000'
 JWKS_URL = f'https://{AUTH0_DOMAIN}/.well-known/jwks.json'
 
 ## AuthError Exception
@@ -89,18 +89,20 @@ Known errors
     Abort (400) if permissions are not included in the token.
     AuthError (401) if desired permission is not in the token.
 '''
-def check_permissions(payload,permission):
+def check_permissions(permission, payload):
+    # print(payload)
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
-            'description': 'Permissions not found in JWT.'
+            'description': 'Permissions not included in JWT.'
         }, 400)
 
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'unauthorized',
-            'description': 'Permission Not found',
+            'description': 'Requested Permission not found.'
         }, 401)
+
     return True
 
 
@@ -210,14 +212,31 @@ Returns:
 Known errors:
     None
 '''
+# def requires_auth(permission=''):
+#     def requires_auth_decorator(f):
+#         @wraps(f)
+#         def wrapper(*args, **kwargs):
+#             token = get_token_auth_header()
+#             payload = verify_decode_jwt(token)
+#             check_permissions(payload,permission)
+#             return f(payload, *args, **kwargs)
+
+#         return wrapper
+#     return requires_auth_decorator
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
-            check_permissions(payload,permission)
+            try:
+                token = get_token_auth_header()
+                payload = verify_decode_jwt(token)
+                check_permissions(permission, payload)
+            except AuthError as authError:
+                raise abort(authError.status_code,
+                            authError.error["description"])
+
             return f(payload, *args, **kwargs)
 
         return wrapper
+
     return requires_auth_decorator
