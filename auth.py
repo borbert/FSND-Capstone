@@ -90,7 +90,7 @@ Known errors
     AuthError (401) if desired permission is not in the token.
 '''
 def check_permissions(permission, payload):
-    print(permission,payload)
+    # print(permission,payload)
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',

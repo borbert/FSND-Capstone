@@ -113,35 +113,40 @@ Known errors:
 @app.route('/actors', methods=['POST'])
 @requires_auth('post:actors')
 def create_actor(payload):
-  # return 'auth implemented'
-  try:
-    request_body = request.get_json()
-    if 'name' not in request_body \
-            or 'date_of_birth' not in request_body:
-        raise KeyError
+  body = request.get_json()
+  # print(body)
 
-    if request_body['name'] == '' \
-            or request_body['date_of_birth'] == '':
-        raise ValueError
+  if not body:
+    abort(400, {'message': 'request does not contain a valid JSON body.'})
+  # Extract name and age value from request body
+  name = body.get('name', None)
+  full_name = body.get('full_name', None)
+  date_of_birth = body.get('date_of_birth', None)
 
-    full_name = ''
-    if 'full_name' in request_body:
-      full_name = request_body["full_name"]
+  # Set gender to value or to 'Other' if not given
+  # gender = body.get('gender', 'Other')
+  # print(gender)
 
-    new_actor = Actor(request_body['name'], full_name,request_body['date_of_birth'])
-    new_actor.insert()
+  # abort if one of these are missing with appropiate error message
+  if not name:
+    abort(422, {'message': 'no name provided.'})
 
-    return jsonify({
-      "success": True,
-      "created_actor_id": new_actor.id
-    }), 201
+  if not date_of_birth:
+    abort(422, {'message': 'no date_of_birth provided.'})
 
-  except (TypeError, KeyError, ValueError):
-      print('error')
-      abort(422)
+  # Create new instance of Actor & insert it.
+  new_actor = (Actor(
+        name = name, 
+        full_name=full_name,
+        date_of_birth = date_of_birth,
+        ))
+  new_actor.insert()
 
-  except Exception:
-      abort(500)
+  return jsonify({
+    'success': True,
+    'created': new_actor.id
+  })
+
 
 '''
 GET /my_lists endpoint

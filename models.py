@@ -54,8 +54,6 @@ class Movies(db.Model):
     release_year = Column(Integer, nullable=False)
     duration = Column(Integer, nullable=False)
     imdb_rating = Column(Float, nullable=False)
-    # cast = db.relationship('Actor', secondary=actor_in_movie,
-    #                        backref=db.backref('movies', lazy=True))
 
     def __init__(self, title, release_year, duration, imdb_rating):
         self.title = title
@@ -107,8 +105,7 @@ class Movies(db.Model):
             "title": self.title,
             "duration": self.duration,
             "release_year": self.release_year,
-            "imdb_rating": self.imdb_rating,
-            "cast": [actor.name for actor in self.cast]
+            "imdb_rating": self.imdb_rating
         }
 
     def __repr__(self):
@@ -129,11 +126,13 @@ class Actor(db.Model):
     name = Column(String(256), nullable=False)
     full_name = Column(String(512), nullable=False, default='')
     date_of_birth = Column(Date, nullable=False)
+    # gender = Column(String, default='')
 
     def __init__(self, name, full_name, date_of_birth):
         self.name = name
         self.full_name = full_name
         self.date_of_birth = date_of_birth
+        # self.gender = gender
 
     def insert(self):
         db.session.add(self)
@@ -156,7 +155,8 @@ class Actor(db.Model):
         return {
             "name": self.name,
             "full_name": self.full_name,
-            "date_of_birth": self.date_of_birth.strftime("%B %d, %Y")
+            "date_of_birth": self.date_of_birth.strftime("%B %d, %Y"),
+            # "gender":self.gender
         }
 
     def full_info(self):
@@ -168,7 +168,7 @@ class Actor(db.Model):
         }
 
     def __repr__(self):
-        return "<Movie {} {} {} />".format(
+        return "<Actor {} {} {} />".format(
             self.name, 
             self.full_name,
             self.date_of_birth
