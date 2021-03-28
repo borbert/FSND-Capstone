@@ -54,8 +54,8 @@ class Movies(db.Model):
     release_year = Column(Integer, nullable=False)
     duration = Column(Integer, nullable=False)
     imdb_rating = Column(Float, nullable=False)
-    cast = db.relationship('Actor', secondary=actor_in_movie,
-                           backref=db.backref('movies', lazy=True))
+    # cast = db.relationship('Actor', secondary=actor_in_movie,
+    #                        backref=db.backref('movies', lazy=True))
 
     def __init__(self, title, release_year, duration, imdb_rating):
         self.title = title

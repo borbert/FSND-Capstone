@@ -1,4 +1,4 @@
-import json, traceback
+import json, traceback, ssl
 from flask import request, _request_ctx_stack, abort
 from functools import wraps
 from jose import jwt
@@ -90,7 +90,7 @@ Known errors
     AuthError (401) if desired permission is not in the token.
 '''
 def check_permissions(permission, payload):
-    # print(payload)
+    print(permission,payload)
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
@@ -127,17 +127,28 @@ Known Errors:
     400 status code invalid_header:  unable to find RSA key.
 '''
 import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
+# ssl._create_default_https_context = ssl._create_unverified_context
+ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+
 
 def verify_decode_jwt(token):
+    # print('token passed to function',token)
     try:
         # GET THE PUBLIC KEY FROM AUTH0
-        jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+        jsonurl = urlopen(
+            f'https://{AUTH0_DOMAIN}/.well-known/jwks.json',
+            context=ssl_context
+            )
+        # print('verify 2')
         jwks = json.loads(jsonurl.read())
-        
+        # print('verify 3')
+
         # GET THE DATA IN THE HEADER
         unverified_header = jwt.get_unverified_header(token)
-        
+        # print('verify 4', unverified_header)
+
         # CHOOSE OUR KEY
         rsa_key = {}
         if 'kid' not in unverified_header:

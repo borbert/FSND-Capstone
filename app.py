@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, db_drop_and_create_all, setup_db, Actor, Movies
 from auth import requires_auth, AuthError
-from authlib.integrations.flask_client import OAuth
+# from authlib.integrations.flask_client import OAuth
 
 
 AUTH0_CALLBACK_URL = os.getenv('AUTH0_CALLBACK_URL')
@@ -30,22 +30,22 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS')
   return response
 
-'''
-0auth info
-'''
-oauth = OAuth(app)
+# '''
+# 0auth info
+# '''
+# oauth = OAuth(app)
 
-auth0 = oauth.register(
-  'auth0',
-  client_id=AUTH0_CLIENT_ID,
-  client_secret=AUTH0_CLIENT_SECRET,
-  api_base_url=AUTH0_BASE_URL,
-  access_token_url='fsnd-project3-borbert.us.auth0.com' + '/oauth/token',
-  authorize_url='fsnd-project3-borbert.us.auth0.com' + '/authorize',
-  client_kwargs={
-      'scope': 'openid profile email'
-          }
-)
+# auth0 = oauth.register(
+#   'auth0',
+#   client_id=AUTH0_CLIENT_ID,
+#   client_secret=AUTH0_CLIENT_SECRET,
+#   api_base_url=AUTH0_BASE_URL,
+#   access_token_url='fsnd-project3-borbert.us.auth0.com' + '/oauth/token',
+#   authorize_url='fsnd-project3-borbert.us.auth0.com' + '/authorize',
+#   client_kwargs={
+#       'scope': 'openid profile email'
+#           }
+# )
 
 
 '''
@@ -259,46 +259,40 @@ Known errors:
 @requires_auth("post:movies")
 def create_movie(payload):
   # return 'auth implemented'
-  print(payload)
-  try:
-    request_body = request.get_json()
+  # print(payload)
 
-    print(request_body)
+  body = request.get_json()
+  # print(body)
 
-    if 'title' not in request_body:
-      raise KeyError
+  if not body:
+    abort(400, {'message': 'request does not contain a valid JSON body.'})
 
-    if request_body['title'] == '' \
-            or request_body['release_year'] <= 0 \
-            or request_body['duration'] <= 0 \
-            or request_body['imdb_rating'] < 0 \
-            or request_body["imdb_rating"] > 10 \
-            or len(request_body["cast"]) == 0:
-      raise TypeError
+  # Extract title and release_date value from request body
+  title = body.get('title', None)
+  release_year = body.get('release_year', None)
+  # print(title,release_year)
 
-    new_movie = Movies(
-        request_body['title'],
-        request_body['release_year'],
-        request_body['duration'],
-        request_body['imdb_rating']
+  # abort if one of these are missing with appropiate error message
+  if not title:
+    abort(422, {'message': 'no title provided.'})
+
+  if not release_year:
+    abort(422, {'message': 'no "release_year" provided.'})
+
+
+  new_movie = Movies(
+    body['title'],
+    body['release_year'],
+    body['duration'],
+    body['imdb_rating']
     )
-    actors = Actor.query.filter(
-        Actor.name.in_(request_body["cast"])).all()
+  
+  new_movie.add()
 
-    if len(request_body["cast"]) == len(actors):
-        new_movie.cast = actors
-        new_movie.insert()
-    else:
-      raise ValueError
-
-    return jsonify({
-        "success": True,
-        "created_movie_id": new_movie.id
+  return jsonify({
+      'success': True,
+      'created': new_movie.id
     }), 201
-
-  except (TypeError, KeyError, ValueError):
-    abort(422)
-
 
 @app.route('/movies/<int:movie_id>')
 @requires_auth("get:movies-info")
@@ -371,10 +365,10 @@ def update_movie(payload, movie_id):
     abort(500)
 
 @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-@requires_auth("delete:movie")
+@requires_auth("delete:movies")
 def delete_movie(payload, movie_id):
   movie = Movies.query.get_or_404(movie_id)
-
+  print(movie)
   try:
     movie.delete()
 
@@ -384,7 +378,7 @@ def delete_movie(payload, movie_id):
     }), 200
 
   except Exception:
-    abort(500)
+    abort(500, {'message':'error while deleting movie'})
 
 #--------------------------Error Handling------------------------#
 @app.errorhandler(401)
