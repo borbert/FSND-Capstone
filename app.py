@@ -25,6 +25,9 @@ def create_app(test_config=None):
 
 app = create_app()
 
+#----------------------------------------------------------------------------#
+# CORS (API configuration)
+#----------------------------------------------------------------------------#
 @app.after_request
 def after_request(response):
   response.headers.add('Access-Control-Allow-Headers','Content-Type, Authorization')
@@ -53,16 +56,16 @@ def after_request(response):
 Routes 
 '''
 #-------------------Generate a new auth token-----------------#
-@app.route("/authorization", methods=["GET"])
-def generate_auth_url():
-  url = f'https://{AUTH0_DOMAIN}/authorize' \
-      f'?audience={AUTH0_AUDIENCE}' \
-      f'&response_type=token&client_id=' \
-      f'{AUTH0_CLIENT_ID}&redirect_uri=' \
-      f'{AUTH0_CALLBACK_URL}'
-  return jsonify({
-      'url': url
-  })
+# @app.route("/authorization", methods=["GET"])
+# def generate_auth_url():
+#   url = f'https://{AUTH0_DOMAIN}/authorize' \
+#       f'?audience={AUTH0_AUDIENCE}' \
+#       f'&response_type=token&client_id=' \
+#       f'{AUTH0_CLIENT_ID}&redirect_uri=' \
+#       f'{AUTH0_CALLBACK_URL}'
+#   return jsonify({
+#       'url': url
+#   })
 #--------------------------General Routes------------------------#
 '''
 GET / endpoint
@@ -145,7 +148,7 @@ def create_actor(payload):
   return jsonify({
     'success': True,
     'created': new_actor.id
-  })
+  }),201
 
 
 '''
