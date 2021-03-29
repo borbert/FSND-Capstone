@@ -30,22 +30,22 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS')
     return response
 
-  # '''
-  # 0auth info
-  # '''
-  # oauth = OAuth(app)
+  '''
+  0auth info
+  '''
+  oauth = OAuth(app)
 
-  # auth0 = oauth.register(
-  #   'auth0',
-  #   client_id=AUTH0_CLIENT_ID,
-  #   client_secret=AUTH0_CLIENT_SECRET,
-  #   api_base_url=AUTH0_BASE_URL,
-  #   access_token_url='fsnd-project3-borbert.us.auth0.com' + '/oauth/token',
-  #   authorize_url='fsnd-project3-borbert.us.auth0.com' + '/authorize',
-  #   client_kwargs={
-  #       'scope': 'openid profile email'
-  #           }
-  # )
+  auth0 = oauth.register(
+    'auth0',
+    client_id=AUTH0_CLIENT_ID,
+    client_secret=AUTH0_CLIENT_SECRET,
+    api_base_url=AUTH0_BASE_URL,
+    access_token_url='fsnd-project3-borbert.us.auth0.com' + '/oauth/token',
+    authorize_url='fsnd-project3-borbert.us.auth0.com' + '/authorize',
+    client_kwargs={
+        'scope': 'openid profile email'
+            }
+  )
 
 
   '''
