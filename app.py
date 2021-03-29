@@ -300,7 +300,7 @@ def create_app(test_config=None):
       }), 201
 
   @app.route('/movies/<int:movie_id>')
-  @requires_auth("get:movies-info")
+  @requires_auth("get:movies")
   def get_movie_by_id(payload, movie_id):
     movie = Movies.query.get_or_404(movie_id)
 
