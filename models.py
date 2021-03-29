@@ -36,11 +36,6 @@ def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
 
-# actor_in_movie = db.Table(
-#     'actor_in_movie',
-#     Column('actor_id', Integer, ForeignKey('actors.id'), primary_key=True),
-#     Column('movie_id', Integer, ForeignKey('movies.id'), primary_key=True)
-# )
 
 '''
 Models
