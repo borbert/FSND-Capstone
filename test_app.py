@@ -14,9 +14,6 @@ config.read('config.ini')
 casting_assistant_token=config["bearer_tokens"]['casting_assistant'] 
 casting_director_token=config["bearer_tokens"]['casting_director']
 executive_producer_token=config["bearer_tokens"]['executive_producer']
-# casting_assistant="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4T280WUI3M2dMdFhTV0p3Ym4xYiJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtcHJvamVjdDMtYm9yYmVydC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAxNzYyNDQ5ZGJkMWEwMDY4ZjBhZGZkIiwiYXVkIjoiaHR0cDovLzEyNy4wLjAuMTo1MDAwIiwiaWF0IjoxNjE2OTYxNjQyLCJleHAiOjE2MTY5NzE2NDIsImF6cCI6IkV5d21haktHdzdkVFJ2eU9SblE5VmNnZ2pSU2UxWXBlIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3JzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyJdfQ.zJzxhVXv3tZApip_nu3NB8i1qFIjBpPbOVu7_dK0dFPPNmwEqtPZGoI8k3inBvDQhxqgshiZcZPSEC3KQnIRpCnCSgO4QPUB6g7fHKm_e604AXbdGHwM4I-OpOJQ4qYmTdSJFsEgH_4VeyL8CAiVy4cVPUi2BRPIbrSRbxnDC7pBVdc0ZGf5A4efEYrv3pqZb5IX0hgof79YqCb2Qy0_2TAxj1rCe8y9hCmfE_CReMXSaGryr2W-oqpLwHAl02Vy6yRMathWm9br8mqErGecQJ1QyYMn325LD08K7wviYNTJpDyKk8kh9g7yXFiBOyCPCXeHJWeDmCtEXJ8KpA0aWQ"
-# casting_director="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4T280WUI3M2dMdFhTV0p3Ym4xYiJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtcHJvamVjdDMtYm9yYmVydC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAxNzY1ZDJkZjdiNWEwMDcxOGU2NTA2IiwiYXVkIjoiaHR0cDovLzEyNy4wLjAuMTo1MDAwIiwiaWF0IjoxNjE2OTYyMjM1LCJleHAiOjE2MTY5NzIyMzUsImF6cCI6IkV5d21haktHdzdkVFJ2eU9SblE5VmNnZ2pSU2UxWXBlIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyJdfQ.p9zkNXs3eug0yEpbZRRodZQpXCthT3wueukoe6Hy2ZBk1aQsOyaX0xREZ8j2To5R1yNXGwVx6v_FmkP9jz-_W_V5fXMAvwC4O-5zXphL6j6g-gLa1IafADLDdHmw8NZDbsKATJwR8QSq9Z_tiKQgvHW6-vEexT7Km3YGsDiwfqlJto7DE-qVbP5h4sN9wLm5YfNjfaYz-7AM0SmYf26Qh0fmfew7vmjb4TSWm4-3dzcF1roaYukrD25p_zQ6n9waEPs7ry8rl7CXFeeIXWwJL4kNCT-1crs0juqXoIarT4X0maUOYfe6bbqIvQzmotYIFLheHuEwYMaD19zQX90qDg"
-# executive_producer="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImQ4T280WUI3M2dMdFhTV0p3Ym4xYiJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtcHJvamVjdDMtYm9yYmVydC51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDMwNTUyMjg3Njk0NjU2NTU5NjAiLCJhdWQiOiJodHRwOi8vMTI3LjAuMC4xOjUwMDAiLCJpYXQiOjE2MTY5NjQ4MDcsImV4cCI6MTYxNzA1MTIwNywiYXpwIjoiRXl3bWFqS0d3N2RUUnZ5T1JuUTlWY2dnalJTZTFZcGUiLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.cLy2EFLn7276biMXSUU2lY6PM_lwCdH-MuYL26jz0XEfzNLUJ6WE6xOJmWtp1qfmJ4P_gkMXKgE8-HCtVt4PoarMj4VpyfEn6n69yCyN65TgEamLT2o1EumytJ8nAwAtyDRB7wZKKezsfAQ_qAL_oIJ3sPh_qzWQZpvvOL6gpw5uwlGYxKPLQnAexOv9YUJUqA2s-tM0qMjWdUbDg4NXQnEGvi4v_L4oPCi_oeuGk2Uue32ciAHMrDszEmu2ORSnUQZBryvrigeLrVSt06bOQqGcEM25MjM5i3JJu7MUGbulUWR2AijAapA6yDuGCOYUMffaxTHKgG-x7VtmbbrKjA"
 
 database_name = os.getenv('DATABASE_NAME',default='test_agency_db')
 db_user = os.getenv('DB_USER',default='postgres')
@@ -96,97 +93,121 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertIn('health', data)
         self.assertEqual(data['health'], 'Running!!')
 
-    # def test_api_call_without_token(self):
-    #     """Failing Test trying to make a call without token"""
-    #     res = self.client().get('/actors')
-    #     data = json.loads(res.data)
+    def test_api_call_without_token(self):
+        """Failing Test trying to make a call without token"""
+        res = self.client().get('/actors')
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertFalse(data["success"])
-    #     self.assertEqual(data["message"], "Authorization Header is required.")
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["message"], "Authentication error.")
 
-    # def test_get_actors(self):
-    #     """Passing Test for GET /actors"""
-    #     res = self.client().get('/actors', headers={
-    #         'Authorization': "Bearer {}".format(self.casting_assistant_token)
-    #     })
-    #     data = json.loads(res.data)
+    def test_get_actors(self):
+        """Passing Test for GET /actors"""
+        # need to insert an actor record to pass the assertion of len(data)
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.VALID_NEW_ACTOR)
+        # get all actors
+        res = self.client().get('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_assistant_token)
+        })
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(len(data))
-    #     self.assertTrue(data["success"])
-    #     self.assertIn('actors', data)
-    #     self.assertTrue(len(data["actors"]))
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(len(data))
+        self.assertTrue(data["success"])
+        self.assertIn('actors', data)
+        self.assertTrue(len(data['actors']))
 
-    # def test_get_actors_by_id(self):
-    #     """Passing Test for GET /actors/<actor_id>"""
-    #     res = self.client().get('/actors/1', headers={
-    #         'Authorization': "Bearer {}".format(self.user_token)
-    #     })
-    #     data = json.loads(res.data)
+    def test_get_actors_by_id(self):
+        """Passing Test for GET /actors/<actor_id>"""
+        # need to insert an actor record in order to find it
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.VALID_NEW_ACTOR)
+        # find actor by id
+        res = self.client().get('/actors/1', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        })
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data["success"])
-    #     self.assertIn('actor', data)
-    #     self.assertIn('full_name', data['actor'])
-    #     self.assertTrue(len(data["actor"]["movies"]))
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data["success"])
+        self.assertIn('actor', data)
+        self.assertIn('full_name', data['actor'])
+        self.assertTrue(len(data["actor"]["movies"]))
 
-    # def test_404_get_actors_by_id(self):
-    #     """Failing Test for GET /actors/<actor_id>"""
-    #     res = self.client().get('/actors/100', headers={
-    #         'Authorization': "Bearer {}".format(self.user_token)
-    #     })
-    #     data = json.loads(res.data)
+    def test_404_get_actors_by_id(self):
+        """Failing Test for GET /actors/<actor_id>"""
+        # need to insert an actor record in order to find it
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.VALID_NEW_ACTOR)
 
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertFalse(data['success'])
-    #     self.assertIn('message', data)
+        # this should fail because the actor is not in the db 
+        res = self.client().get('/actors/1', headers={
+            'Authorization': "Bearer {}".format("vkherbvqeibu")
+        })
+        data = json.loads(res.data)
 
-    # def test_create_actor_with_user_token(self):
-    #     """Failing Test for POST /actors"""
-    #     res = self.client().post('/actors', headers={
-    #         'Authorization': "Bearer {}".format(self.user_token)
-    #     }, json=self.VALID_NEW_ACTOR)
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertIn('message', data)
 
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertFalse(data["success"])
-    #     self.assertIn('message', data)
+    def test_create_actor_with_user_token(self):
+        """Failing Test for POST /actors"""
+        # create a new actor with incorrect permissions
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_assistant_token)
+        }, json=self.VALID_NEW_ACTOR)
+        data = json.loads(res.data)
 
-    # def test_create_actor(self):
-    #     """Passing Test for POST /actors"""
-    #     res = self.client().post('/actors', headers={
-    #         'Authorization': "Bearer {}".format(self.manager_token)
-    #     }, json=self.VALID_NEW_ACTOR)
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data["success"])
+        self.assertIn('message', data)
 
-    #     self.assertEqual(res.status_code, 201)
-    #     self.assertTrue(data["success"])
-    #     self.assertIn('created_actor_id', data)
+    def test_create_actor(self):
+        """Passing Test for POST /actors"""
+        # create a new actor with proper credentials
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.VALID_NEW_ACTOR)
+        data = json.loads(res.data)
 
-    # def test_422_create_actor(self):
-    #     """Failing Test for POST /actors"""
-    #     res = self.client().post('/actors', headers={
-    #         'Authorization': "Bearer {}".format(self.manager_token)
-    #     }, json=self.INVALID_NEW_ACTOR)
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 201)
+        self.assertTrue(data["success"])
+        self.assertIn('created', data)
 
-    #     self.assertEqual(res.status_code, 422)
-    #     self.assertFalse(data['success'])
-    #     self.assertIn('message', data)
+    def test_422_create_actor(self):
+        """Failing Test for POST /actors"""
+        #failing test due to inserting invalid data --testing 422 
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.INVALID_NEW_ACTOR)
+        data = json.loads(res.data)
 
-    # def test_update_actor_info(self):
-    #     """Passing Test for PATCH /actors/<actor_id>"""
-    #     res = self.client().patch('/actors/1', headers={
-    #         'Authorization': "Bearer {}".format(self.manager_token)
-    #     }, json=self.VALID_UPDATE_ACTOR)
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertIn('message', data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data["success"])
-    #     self.assertIn('actor_info', data)
-    #     self.assertEqual(data["actor_info"]["full_name"],
-    #                      self.VALID_UPDATE_ACTOR["full_name"])
+    def test_update_actor_info(self):
+        """Passing Test for PATCH /actors/<actor_id>"""
+        #insert a record before updating the record
+        res = self.client().post('/actors', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.VALID_NEW_ACTOR)
+        #patch method on the actor recrod just inserted
+        res = self.client().patch('/actors/1', headers={
+            'Authorization': "Bearer {}".format(self.casting_director_token)
+        }, json=self.VALID_UPDATE_ACTOR)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data["success"])
+        self.assertIn('actor_info', data)
+        self.assertEqual(data["actor_info"]["full_name"],
+                         self.VALID_UPDATE_ACTOR["full_name"])
 
     # def test_422_update_actor_info(self):
     #     """Failing Test for PATCH /actors/<actor_id>"""
