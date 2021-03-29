@@ -116,8 +116,6 @@ class Movies(db.Model):
             self.duration
         )
 
-    
-
 
 class Actor(db.Model):
     __tablename__ = "actors"
@@ -163,8 +161,7 @@ class Actor(db.Model):
         return {
             "name": self.name,
             "full_name": self.full_name,
-            "date_of_birth": self.date_of_birth.strftime("%B %d, %Y"),
-            "movies": [movie.title for movie in self.movies]
+            "date_of_birth": self.date_of_birth.strftime("%B %d, %Y")
         }
 
     def __repr__(self):

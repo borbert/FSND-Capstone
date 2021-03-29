@@ -98,6 +98,16 @@ def create_app(test_config=None):
         "actors": actors
     }), 200
 
+  @app.route('/actors/<int:actor_id>', methods=['GET'])
+  @requires_auth("get:actors")
+  def get_actor_by_id(payload, actor_id):
+    actor = Actor.query.get_or_404(actor_id)
+
+    return jsonify({
+      "success": True,
+      "actor": actor.full_info()
+    }), 200
+
   '''
   GET /my_lists endpoint
       This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized

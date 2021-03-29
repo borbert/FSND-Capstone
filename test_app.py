@@ -135,18 +135,12 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(data["success"])
         self.assertIn('actor', data)
         self.assertIn('full_name', data['actor'])
-        self.assertTrue(len(data["actor"]["movies"]))
 
     def test_404_get_actors_by_id(self):
         """Failing Test for GET /actors/<actor_id>"""
-        # need to insert an actor record in order to find it
-        res = self.client().post('/actors', headers={
-            'Authorization': "Bearer {}".format(self.casting_director_token)
-        }, json=self.VALID_NEW_ACTOR)
-
         # this should fail because the actor is not in the db 
         res = self.client().get('/actors/1', headers={
-            'Authorization': "Bearer {}".format("vkherbvqeibu")
+            'Authorization': "Bearer {}".format(casting_director_token)
         })
         data = json.loads(res.data)
 
