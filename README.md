@@ -13,6 +13,9 @@ The Casting Agency API supports the agency by allowing users to query the databa
 
 Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python).
 
+#### Postrgres
+Make sure you have postgres installed locally if you wish to test the code locally.
+
 #### Virtual Enviornment
 
 I recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).  I used the venv process for this project.
@@ -30,6 +33,51 @@ pip install -r requirements.txt
 
 This will install all of the required packages.
 
+#### Heroku
+1. The api can be pushed to heroku to host and run live.  In order to complete this you will need the heroku cli.
+```
+brew tap heroku/brew && brew install heroku
+```
+Additional instructions can be found here:  https://devcenter.heroku.com/categories/command-line.
+2. Once the heroku CLI is installed follow these steps to setup your app:
+```
+heroku create <name_of_your_app>
+```
+3. Once the app is created you will get a git url and a url to access the app.  Use the git url to hook your repository to heroku.
+```
+git remote add heroku <heroku_git_url>
+```
+4. Add a postgres database to the project in heroku.
+```
+heroku addons:create heroku-postgresql:hobby-dev --app <name_of_your_application>
+```
+5. Then push your code to heroku
+```
+git push heroku master
+```
+6. Run database migrations on heroku and models/tables will be built in the background.
+```
+heroku run python manage.py db upgrade --app <name_of_your_application>
+```
+
+#### Setting up the environment 
+Run the code below to setup the environemental variables.
+```
+source setup.sh
+```
+Then identifiy the entry script for flask.
+```
+export FLASK_APP=app.py 
+export FLASK_ENV=development # enables debug mode  
+```
+
+#### Running the development server
+You can run the development server by running:
+```python app.py
+```
+OR
+```flask run --reload
+```
 
 # Running the API
 
