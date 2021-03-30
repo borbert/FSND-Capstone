@@ -5,7 +5,26 @@ The Casting Agency API supports the agency by allowing users to query the databa
 - Casting director: Can view, add, modify, or delete actors; can view and modify movies.
 - Executive producer: Can view, add, modify, or delete actors and movies. 
 
+## Motivations & Covered Topics
+
+This is the last project of the Udacity-Full-Stack-Nanodegree Course. It is a fictitional backend api for a casting agency who needs to keep track of movies and actors.  As stated above there are three levels of authorization with different permissions for each level.  
+
+This project covers following technical topics in this final project:
+1. Database modeling with `postgres` & `sqlalchemy` (see `models.py`)
+2. API to performance CRUD Operations on database with `Flask` (see `app.py`)
+3. Automated testing with `Unittest` (see `test_app`)
+4. Authorization & Role based Authentification with `Auth0` (see `auth.py`)
+5. Deployment on `Heroku`
+
 ## Getting Started
+
+### Technologies
+- Python 3.9
+- Postgres
+- Flask and sqlalchemy
+- Unittest
+- Auth0
+- Heroku
 
 ### Installing Dependencies
 
