@@ -10,7 +10,7 @@ from auth import requires_auth, AuthError
 AUTH0_CALLBACK_URL = os.getenv('AUTH0_CALLBACK_URL')
 AUTH0_CLIENT_ID = os.getenv('AUTH0_CLIENT_ID')
 AUTH0_CLIENT_SECRET = os.getenv('AUTH0_CLIENT_SECRET')
-AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN',default='fsnd-project3-borbert.us.auth0.com')
 AUTH0_BASE_URL = os.getenv('AUTH0_BASE_URL')
 AUTH0_AUDIENCE = os.getenv('AUTH0_AUDIENCE')
 
@@ -21,7 +21,7 @@ def create_app(test_config=None):
   # db_drop_and_create_all()
   CORS(app) #,resources={r"/*": {"origins": "*"}}
 
-    #----------------------------------------------------------------------------#
+  #----------------------------------------------------------------------------#
   # CORS (API configuration)
   #----------------------------------------------------------------------------#
   @app.after_request
@@ -30,22 +30,22 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS')
     return response
 
-  '''
-  0auth info
-  '''
-  oauth = OAuth(app)
+  # '''
+  # 0auth info
+  # '''
+  # oauth = OAuth(app)
 
-  auth0 = oauth.register(
-    'auth0',
-    client_id=AUTH0_CLIENT_ID,
-    client_secret=AUTH0_CLIENT_SECRET,
-    api_base_url=AUTH0_BASE_URL,
-    access_token_url='fsnd-project3-borbert.us.auth0.com' + '/oauth/token',
-    authorize_url='fsnd-project3-borbert.us.auth0.com' + '/authorize',
-    client_kwargs={
-        'scope': 'openid profile email'
-            }
-  )
+  # auth0 = oauth.register(
+  #   'auth0',
+  #   client_id=AUTH0_CLIENT_ID,
+  #   client_secret=AUTH0_CLIENT_SECRET,
+  #   api_base_url=AUTH0_BASE_URL,
+  #   access_token_url='fsnd-project3-borbert.us.auth0.com' + '/oauth/token',
+  #   authorize_url='fsnd-project3-borbert.us.auth0.com' + '/authorize',
+  #   client_kwargs={
+  #       'scope': 'openid profile email'
+  #           }
+  # )
 
 
   '''
@@ -76,13 +76,13 @@ def create_app(test_config=None):
 
   #--------------------------Actors Controllers------------------------#
   '''
-  GET /my_lists endpoint
-      This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized
-      the method with retrieve a list of lists, in their long description format, from the database.
+  GET /actors endpoint
+      This is an endpoint that requires the 'get:actors' permission.  Once the action is authorized
+      the method with retrieve a list of actors, in their long description format, from the database.
   Requires:
-      'get:lists' permission
+      'get:actors' permission
   Returns:
-      Status code 200 and json {"success": True, "lists": lists} where lists is the list of user lists.
+      Status code 200 and json {"success": True, "actors": actors} where actors is the list of actors.
   Known errors:
       401 Unauthorized if user lacks permission
   '''
@@ -97,7 +97,18 @@ def create_app(test_config=None):
         "success": True,
         "actors": actors
     }), 200
-
+  
+  '''
+  GET /actors/<int:actor_id> endpoint
+      This is an endpoint that requires the 'get:actors' permission.  Once the action is authorized
+      the method with retrieve an actor, in their long description format, from the database.
+  Requires:
+      'get:actors' permission
+  Returns:
+      Status code 200 and json {"success": True, "actor": actor.full_info()} where actor is an actor.
+  Known errors:
+      401 Unauthorized if user lacks permission
+  '''
   @app.route('/actors/<int:actor_id>', methods=['GET'])
   @requires_auth("get:actors")
   def get_actor_by_id(payload, actor_id):
@@ -109,15 +120,16 @@ def create_app(test_config=None):
     }), 200
 
   '''
-  GET /my_lists endpoint
-      This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized
-      the method with retrieve a list of lists, in their long description format, from the database.
+  POST /actors endpoint
+      This is an endpoint that requires the 'post:actors' permission.  Once the action is authorized
+      the method insert a new actor in the database.
   Requires:
-      'get:lists' permission
+      'post:actors' permission
   Returns:
-      Status code 200 and json {"success": True, "lists": lists} where lists is the list of user lists.
+      Status code 201 and json {"success": True, "created": new_actor.id}.
   Known errors:
-      401 Unauthorized if user lacks permission
+      401 Unauthorized if user lacks permission.
+      422 Invalid if name or date of birth missing.
   '''
   @app.route('/actors', methods=['POST'])
   @requires_auth('post:actors')
@@ -158,15 +170,17 @@ def create_app(test_config=None):
 
 
   '''
-  GET /my_lists endpoint
-      This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized
-      the method with retrieve a list of lists, in their long description format, from the database.
+  PATCH /actors/<int:actor_id> endpoint
+      This is an endpoint that requires the 'patch:actors' permission.  Once the action is authorized
+      the method update an existing actor, from the database.
   Requires:
-      'get:lists' permission
+      'patch:actors' permission
   Returns:
-      Status code 200 and json {"success": True, "lists": lists} where lists is the list of user lists.
+      Status code 200 and json {"success": True, "actor": actor.full_info()} where actor is an actor.
   Known errors:
       401 Unauthorized if user lacks permission
+      422 Value, type, or keyerror error based upon validation checks 
+      500 For internal server error
   '''
   @app.route('/actors/<int:actor_id>', methods=['PATCH'])
   @requires_auth("patch:actors")
@@ -210,15 +224,17 @@ def create_app(test_config=None):
       abort(500)
 
   '''
-  GET /my_lists endpoint
-      This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized
-      the method with retrieve a list of lists, in their long description format, from the database.
+  DELETE /actors/<int:actor_id> endpoint
+      This is an endpoint that requires the 'delete:actors' permission.  Once the action is authorized
+      the method an actor from the database.
   Requires:
-      'get:lists' permission
+      'delete:actors' permission
   Returns:
-      Status code 200 and json {"success": True, "lists": lists} where lists is the list of user lists.
+      Status code 200 and json {"success": True, "deleted_actor_id": actor.id} where actor.id is the actor.id 
+      of actor that was deleted.
   Known errors:
       401 Unauthorized if user lacks permission
+      500 Internal server error
   '''
   @app.route('/actors/<int:actor_id>', methods=['DELETE'])
   @requires_auth("delete:actors")
@@ -238,13 +254,13 @@ def create_app(test_config=None):
 
   #--------------------------Movie Controllers-------------------------#
   '''
-  GET /my_lists endpoint
-      This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized
-      the method with retrieve a list of lists, in their long description format, from the database.
+  GET /movies endpoint
+      This is an endpoint that requires the 'get:movies' permission.  Once the action is authorized
+      the method with retrieve a list of movies, in their long description format, from the database.
   Requires:
-      'get:lists' permission
+      'get:movies' permission
   Returns:
-      Status code 200 and json {"success": True, "lists": lists} where lists is the list of user lists.
+      Status code 200 and json {"success": True, "movies": movies} where movies is the list of movies.
   Known errors:
       401 Unauthorized if user lacks permission
   '''
@@ -258,17 +274,18 @@ def create_app(test_config=None):
         "movies": movies
     }), 200
 
-
   '''
-  GET /my_lists endpoint
-      This is an endpoint that requires the 'get:lists' permission.  Once the action is authorized
-      the method with retrieve a list of lists, in their long description format, from the database.
+  POST /movies endpoint
+      This is an endpoint that requires the 'post:movies' permission.  Once the action is authorized
+      the method insert a new movies in the database.
   Requires:
-      'get:lists' permission
+      'post:movies' permission
   Returns:
-      Status code 200 and json {"success": True, "lists": lists} where lists is the list of user lists.
+      Status code 201 and json {"success": True, "created": new_movies.id}.
   Known errors:
-      401 Unauthorized if user lacks permission
+      400 Not valid JSON body provided.
+      401 Unauthorized if user lacks permission.
+      422 Invalid if release year or title missing.
   '''
   @app.route('/movies', methods=['POST'])
   @requires_auth("post:movies")
@@ -308,7 +325,18 @@ def create_app(test_config=None):
         'success': True,
         'created': new_movie.id
       }), 201
-
+  
+  '''
+  GET /movies/<int:movie_id> endpoint
+      This is an endpoint that requires the 'get:movies' permission.  Once the action is authorized
+      the method with retrieve an movies, in their long description format, from the database.
+  Requires:
+      'get:movies' permission
+  Returns:
+      Status code 200 and json {"success": True, "movies": movies.full_info()} where movies is an movies.
+  Known errors:
+      401 Unauthorized if user lacks permission
+  '''
   @app.route('/movies/<int:movie_id>')
   @requires_auth("get:movies")
   def get_movie_by_id(payload, movie_id):
@@ -318,7 +346,20 @@ def create_app(test_config=None):
       "success": True,
       "movie": movie.full_info()
     }), 200
-
+ 
+ '''
+  PATCH /movies/<int:movie_id> endpoint
+      This is an endpoint that requires the 'patch:movies' permission.  Once the action is authorized
+      the method update an existing movies, from the database.
+  Requires:
+      'patch:movies' permission
+  Returns:
+      Status code 200 and json {"success": True, "movies": movies.full_info()} where movies is an movies.
+  Known errors:
+      401 Unauthorized if user lacks permission
+      422 Value, type, or keyerror error based upon validation checks 
+      500 For internal server error
+  '''
   @app.route('/movies/<int:movie_id>', methods=['PATCH'])
   @requires_auth("patch:movies")
   def update_movie(payload, movie_id):
@@ -378,7 +419,20 @@ def create_app(test_config=None):
 
     except Exception:
       abort(500)
-
+  
+  '''
+  DELETE /movies/<int:movie_id> endpoint
+      This is an endpoint that requires the 'delete:movies' permission.  Once the action is authorized
+      the method an actor from the database.
+  Requires:
+      'delete:movies' permission
+  Returns:
+      Status code 200 and json {"success": True, "deleted_movies_id": movies.id} where movies.id is the movies.id 
+      of movies that was deleted.
+  Known errors:
+      401 Unauthorized if user lacks permission
+      500 Internal server error
+  '''
   @app.route('/movies/<int:movie_id>', methods=['DELETE'])
   @requires_auth("delete:movies")
   def delete_movie(payload, movie_id):
