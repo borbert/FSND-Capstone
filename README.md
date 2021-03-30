@@ -26,6 +26,16 @@ This project covers following technical topics in this final project:
 - Auth0
 - Heroku
 
+### Technology Stack
+
+- [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is used to handle the requests and responses from the backend server.
+
+- [SQLAlchemy](https://www.sqlalchemy.org/) is a Python SQL toolkit. The ORM allows for the database modeling to be abstracted away allowing the developer to focus on building the objects (models).
+
+- [Postgres](https://www.postgresql.org) was the chosen database technology for this project becuase of its ease of use and relational structure.
+
+- [Auth0](https://auth0.com) was chosen for the authorization and authentication of the api.  It allows for these processes to be handled by a third party and even allows authentication from other services, i.e. Github, Google, etc. This takes the complexities of user management out of the hands of the developer.
+
 ### Installing Dependencies
 
 #### Python 3.9
