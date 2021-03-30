@@ -5,6 +5,32 @@ The Casting Agency API supports the agency by allowing users to query the databa
 - Casting director: Can view, add, modify, or delete actors; can view and modify movies.
 - Executive producer: Can view, add, modify, or delete actors and movies. 
 
+## Getting Started
+
+### Installing Dependencies
+
+#### Python 3.9
+
+Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python).
+
+#### Virtual Enviornment
+
+I recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).  I used the venv process for this project.
+```
+python3 -m venv <name of your environment>
+```
+
+#### Project Dependencies
+
+Once you have your virtual environment setup and running, install dependencies by running:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install all of the required packages.
+
+
 # Running the API
 
 API endpoints can be accessed via  https://borbertcastingagency.herokuapp.com/

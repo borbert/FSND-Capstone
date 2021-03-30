@@ -1,8 +1,19 @@
 import os, json
-from flask import Flask, request, abort, jsonify
+from flask import (
+  Flask, 
+  request, 
+  abort, 
+  jsonify
+  )
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, db_drop_and_create_all, setup_db, Actor, Movies
+from models import (
+  setup_db, 
+  db_drop_and_create_all, 
+  setup_db, 
+  Actor, 
+  Movies
+  )
 from auth import requires_auth, AuthError
 # from authlib.integrations.flask_client import OAuth
 
@@ -116,7 +127,7 @@ def create_app(test_config=None):
 
     return jsonify({
       "success": True,
-      "actor": actor.full_info()
+      "actor": actor.long()
     }), 200
 
   '''
@@ -221,6 +232,7 @@ def create_app(test_config=None):
       abort(422)
 
     except Exception:
+      print(sys.exc_info())
       abort(500)
 
   '''
@@ -250,6 +262,7 @@ def create_app(test_config=None):
       }), 200
 
     except Exception:
+      print(sys.exc_info())
       abort(500)
 
   #--------------------------Movie Controllers-------------------------#
@@ -344,7 +357,7 @@ def create_app(test_config=None):
 
     return jsonify({
       "success": True,
-      "movie": movie.full_info()
+      "movie": movie.long()
     }), 200
  
  '''
@@ -418,6 +431,7 @@ def create_app(test_config=None):
       abort(422)
 
     except Exception:
+      print(sys.exc_info())
       abort(500)
   
   '''

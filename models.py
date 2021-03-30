@@ -95,14 +95,6 @@ class Movies(db.Model):
             "imdb_rating": self.imdb_rating
         }
 
-    def full_info(self):
-        return {
-            "title": self.title,
-            "duration": self.duration,
-            "release_year": self.release_year,
-            "imdb_rating": self.imdb_rating
-        }
-
     def __repr__(self):
         return "<Movie {} {} {} {} />".format(
             self.title,
