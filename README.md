@@ -5,11 +5,11 @@ The Casting Agency API supports the agency by allowing users to query the databa
 - Casting director: Can view, add, modify, or delete actors; can view and modify movies.
 - Executive producer: Can view, add, modify, or delete actors and movies. 
 
-# Running the API [TODO]
+# Running the API
 
 API endpoints can be accessed via  https://borbertcastingagency.herokuapp.com/
 
-Auth0 information for endpoints that require authentication can be found in `setup.sh`.
+Auth0 information for endpoints that require authentication can be found in `setup.sh`.  Tokens provided should allow testing of the API endpoints.
 
 # Running tests
 
@@ -78,7 +78,7 @@ Endpoints
 GET '/actors'
 - Fetches a JSON object with a list of actors in the database.
 - Request Arguments: None
-- Returns: An object with a single key, actors, that contains multiple objects with a series of string key pairs.
+- Returns: A list of actors, that contains multiple objects with a series of string key pairs.
 ```
 {
     "actors": [
@@ -101,7 +101,7 @@ GET '/actors'
 GET '/movies'
 - Fetches a JSON object with a list of movies in the database.
 - Request Arguments: None
-- Returns: An object with a single key, movies, that contains multiple objects with a series of string key pairs.
+- Returns: A list of movies, that contains multiple objects with a series of string key pairs.
 ```
 {
     "movies": [
@@ -114,11 +114,6 @@ GET '/movies'
             "id": 3,
             "release_year": "January 16, 2009",
             "title": "My Bloody Valentine"
-        },
-        {
-            "id": 4,
-            "release_year": "May 23rd, 1980",
-            "title": "The Shining"
         }
     ],
     "success": true
@@ -127,7 +122,7 @@ GET '/movies'
 POST '/actor'
 - Posts a new actor to the database, including the name, age, gender, and actor ID, which is automatically assigned upon insertion.
 - Request Arguments: Requires three string arguments: name, age, gender.
-- Returns: An actor object with the age, gender, actor ID, and name.
+- Returns: An actor object with the date of birth, gender, and name.
 
 ```
 {
@@ -143,7 +138,7 @@ POST '/actor'
 POST '/movie'
 - Posts a new movie to the database, including the title, release, and movie ID, which is automatically assigned upon insertion.
 - Request Arguments: Requires two string arguments: title, release.
-- Returns: A movie object with the movie ID, release_year, and title.
+- Returns: A movie object with the duration, imdb_rating, release_year, and title.
 
 ```
 {
@@ -187,7 +182,7 @@ PATCH '/movies/<int:movie_id>'
 - Returns: A movie object with the full body of the specified movie ID.
 ```
 {
-    "movie": {
+    {
         "id": 5,
         "release_year": 1999,
         "title": "Thor",
