@@ -3,14 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import Column, String, Integer, ForeignKey, Float, Date, Table
 
-database_name = os.getenv('DATABASE_NAME',default='agency_app')
-db_user = os.getenv('DB_USER',default='postgres')
-db_pass = os.getenv('DB_PASS',default=None)
+database_name = os.getenv('DATABASE_NAME', default='agency_app')
+db_user = os.getenv('DB_USER', default='postgres')
+db_pass = os.getenv('DB_PASS', default=None)
 db_host = os.getenv('DB_HOST', default='localhost')
-port = os.getenv('PORT',default=5432)
+port = os.getenv('PORT', default=5432)
 database_path = os.getenv(
-    'DATABASE_URL',default="postgres://{}:{}@{}:{}/{}".format(
-        db_user,db_pass,db_host, port, database_name))
+    'DATABASE_URL', default="postgres://{}:{}@{}:{}/{}".format(
+        db_user, db_pass, db_host, port, database_name))
 
 db = SQLAlchemy()
 
@@ -18,16 +18,20 @@ db = SQLAlchemy()
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
+
+
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    migrate = Migrate(app,db)
+    migrate = Migrate(app, db)
+
 
 def return_db():
     return db
-    
+
+
 def db_drop_and_create_all():
     """
     drops the database tables and starts fresh
@@ -40,6 +44,7 @@ def db_drop_and_create_all():
 '''
 Models
 '''
+
 
 class Movies(db.Model):
     __tablename__ = "movies"
@@ -55,7 +60,6 @@ class Movies(db.Model):
         self.release_year = release_year
         self.duration = duration
         self.imdb_rating = imdb_rating
-
 
     def add(self):
         """
@@ -82,9 +86,9 @@ class Movies(db.Model):
 
     def short(self):
         return {
-            'id':self.id,
-            'title':self.title,
-            'release_year':self.release_year
+            'id': self.id,
+            'title': self.title,
+            'release_year': self.release_year
         }
 
     def long(self):
@@ -99,7 +103,7 @@ class Movies(db.Model):
         return "<Movie {} {} {} {} />".format(
             self.title,
             self.release_year,
-            self.imdb_rating, 
+            self.imdb_rating,
             self.duration
         )
 
@@ -153,7 +157,7 @@ class Actor(db.Model):
 
     def __repr__(self):
         return "<Actor {} {} {} />".format(
-            self.name, 
+            self.name,
             self.full_name,
             self.date_of_birth
         )

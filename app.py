@@ -1,17 +1,18 @@
-import os, json
+import os
+import json
 from flask import (
-  Flask, 
-  request, 
-  abort, 
+  Flask,
+  request,
+  abort,
   jsonify
   )
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import (
-  setup_db, 
-  db_drop_and_create_all, 
-  setup_db, 
-  Actor, 
+  setup_db,
+  db_drop_and_create_all,
+  setup_db,
+  Actor,
   Movies
   )
 from auth import requires_auth, AuthError
@@ -21,24 +22,31 @@ from auth import requires_auth, AuthError
 AUTH0_CALLBACK_URL = os.getenv('AUTH0_CALLBACK_URL')
 AUTH0_CLIENT_ID = os.getenv('AUTH0_CLIENT_ID')
 AUTH0_CLIENT_SECRET = os.getenv('AUTH0_CLIENT_SECRET')
-AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN',default='fsnd-project3-borbert.us.auth0.com')
+AUTH0_DOMAIN = os.getenv(
+    'AUTH0_DOMAIN',
+     default='fsnd-project3-borbert.us.auth0.com')
 AUTH0_BASE_URL = os.getenv('AUTH0_BASE_URL')
 AUTH0_AUDIENCE = os.getenv('AUTH0_AUDIENCE')
+
 
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   setup_db(app)
   # db_drop_and_create_all()
-  CORS(app) #,resources={r"/*": {"origins": "*"}}
+  CORS(app)  # ,resources={r"/*": {"origins": "*"}}
 
   #----------------------------------------------------------------------------#
   # CORS (API configuration)
   #----------------------------------------------------------------------------#
   @app.after_request
   def after_request(response):
-    response.headers.add('Access-Control-Allow-Headers','Content-Type, Authorization')
-    response.headers.add('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS')
+    response.headers.add(
+    'Access-Control-Allow-Headers',
+     'Content-Type, Authorization')
+    response.headers.add(
+    'Access-Control-Allow-Methods',
+     'GET, POST, PATCH, DELETE, OPTIONS')
     return response
 
   # '''
@@ -58,9 +66,8 @@ def create_app(test_config=None):
   #           }
   # )
 
-
   '''
-  Routes 
+  Routes
   '''
   #-------------------Generate a new auth token-----------------#
   @app.route("/authorization", methods=["GET"])
@@ -100,7 +107,7 @@ def create_app(test_config=None):
   @app.route('/actors', methods=['GET'])
   @requires_auth('get:actors')
   def get_actors(payload):
-    
+
     actors_query = Actor.query.order_by(Actor.id).all()
     actors = [actor.short() for actor in actors_query]
 
@@ -108,7 +115,7 @@ def create_app(test_config=None):
         "success": True,
         "actors": actors
     }), 200
-  
+
   '''
   GET /actors/<int:actor_id> endpoint
       This is an endpoint that requires the 'get:actors' permission.  Once the action is authorized
@@ -168,17 +175,16 @@ def create_app(test_config=None):
 
     # Create new instance of Actor & insert it.
     new_actor = (Actor(
-          name = name, 
+          name=name,
           full_name=full_name,
-          date_of_birth = date_of_birth,
+          date_of_birth=date_of_birth,
           ))
     new_actor.insert()
 
     return jsonify({
       'success': True,
       'created': new_actor.id
-    }),201
-
+    }), 201
 
   '''
   PATCH /actors/<int:actor_id> endpoint
@@ -190,7 +196,7 @@ def create_app(test_config=None):
       Status code 200 and json {"success": True, "actor": actor.full_info()} where actor is an actor.
   Known errors:
       401 Unauthorized if user lacks permission
-      422 Value, type, or keyerror error based upon validation checks 
+      422 Value, type, or keyerror error based upon validation checks
       500 For internal server error
   '''
   @app.route('/actors/<int:actor_id>', methods=['PATCH'])
@@ -242,7 +248,7 @@ def create_app(test_config=None):
   Requires:
       'delete:actors' permission
   Returns:
-      Status code 200 and json {"success": True, "deleted_actor_id": actor.id} where actor.id is the actor.id 
+      Status code 200 and json {"success": True, "deleted_actor_id": actor.id} where actor.id is the actor.id
       of actor that was deleted.
   Known errors:
       401 Unauthorized if user lacks permission
@@ -324,21 +330,20 @@ def create_app(test_config=None):
     if not release_year:
       abort(422, {'message': 'no "release_year" provided.'})
 
-
     new_movie = Movies(
       body['title'],
       body['release_year'],
       body['duration'],
       body['imdb_rating']
       )
-    
+
     new_movie.add()
 
     return jsonify({
         'success': True,
         'created': new_movie.id
       }), 201
-  
+
   '''
   GET /movies/<int:movie_id> endpoint
       This is an endpoint that requires the 'get:movies' permission.  Once the action is authorized
@@ -359,7 +364,7 @@ def create_app(test_config=None):
       "success": True,
       "movie": movie.long()
     }), 200
- 
+
  '''
   PATCH /movies/<int:movie_id> endpoint
       This is an endpoint that requires the 'patch:movies' permission.  Once the action is authorized

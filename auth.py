@@ -1,4 +1,7 @@
-import json, traceback, ssl
+import ssl
+import json
+import traceback
+import ssl
 from flask import request, _request_ctx_stack, abort
 from functools import wraps
 from jose import jwt
@@ -9,23 +12,25 @@ ALGORITHMS = os.environ.get['ALGORITHMS']
 API_AUDIENCE = os.environ.get('API_AUDIENCE')
 JWKS_URL = f'https://{AUTH0_DOMAIN}/.well-known/jwks.json'
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 '''
-The get_token_auth_header() method attempts to get the header from the request and parse it.  It 
-takes in a payload from the request, validates that it is properly formatted, splits the 
-authorization header into the two parts of a bearer token, and returns the token.  
+The get_token_auth_header() method attempts to get the header from the request and parse it.  It
+takes in a payload from the request, validates that it is properly formatted, splits the
+authorization header into the two parts of a bearer token, and returns the token.
 Calling:
     get_token_auth_header()
 Requires:
@@ -38,8 +43,10 @@ Known errors
     AuthError is the token is not a proper bearer token.
 
 '''
+
+
 def get_token_auth_header():
-    auth_header=request.headers.get('Authorization', None)
+    auth_header = request.headers.get('Authorization', None)
     # print(auth_header)
 
     if not auth_header:
@@ -47,8 +54,8 @@ def get_token_auth_header():
             'code': 'authorization_header_missing',
             'description': 'Authorization header is expected.'
         }, 401)
-    
-    #split the auth header parts
+
+    # split the auth header parts
     header_parts = auth_header.split(" ")
 
     if header_parts[0].lower() != 'bearer':
@@ -65,14 +72,14 @@ def get_token_auth_header():
 
     token = header_parts[1]
     return token
-    
+
     # print(token)
 
 
 '''
-The get_token_auth_header() method attempts to get the header from the request and parse it.  It 
-takes in a payload from the request, validates that it is properly formatted, splits the 
-authorization header into the two parts of a bearer token, and returns the token.  
+The get_token_auth_header() method attempts to get the header from the request and parse it.  It
+takes in a payload from the request, validates that it is properly formatted, splits the
+authorization header into the two parts of a bearer token, and returns the token.
 
 Calling:
     check_permissions(permission, payload)
@@ -88,6 +95,8 @@ Known errors
     Abort (400) if permissions are not included in the token.
     AuthError (401) if desired permission is not in the token.
 '''
+
+
 def check_permissions(permission, payload):
     # print(permission,payload)
     if 'permissions' not in payload:
@@ -106,11 +115,11 @@ def check_permissions(permission, payload):
 
 
 '''
-The verify_decode_jwt() method takes in the authorization token and decodes it for use in the 
-authorization functions.  It takes an encoded jwt token and attempts to parse it.  It returns the 
+The verify_decode_jwt() method takes in the authorization token and decodes it for use in the
+authorization functions.  It takes an encoded jwt token and attempts to parse it.  It returns the
 parsed and decoded token.
 
-Calling: 
+Calling:
     verify_decode_jwt(token).
 Parameters:
     token: a json web token (string).
@@ -125,7 +134,6 @@ Known Errors:
     400 status code invalid_header:  unable to parse token.
     400 status code invalid_header:  unable to find RSA key.
 '''
-import ssl
 # ssl._create_default_https_context = ssl._create_unverified_context
 ssl_context = ssl.create_default_context()
 ssl_context.check_hostname = False
@@ -139,7 +147,7 @@ def verify_decode_jwt(token):
         jsonurl = urlopen(
             f'https://{AUTH0_DOMAIN}/.well-known/jwks.json',
             context=ssl_context
-            )
+        )
         # print('verify 2')
         jwks = json.loads(jsonurl.read())
         # print('verify 3')
@@ -165,7 +173,7 @@ def verify_decode_jwt(token):
                     'n': key['n'],
                     'e': key['e']
                 }
-        
+
         # Finally, verify!!!
         if rsa_key:
             try:
@@ -180,38 +188,39 @@ def verify_decode_jwt(token):
 
                 return payload
 
-            #Expired token
+            # Expired token
             except jwt.ExpiredSignatureError:
                 raise AuthError({
                     'code': 'token_expired',
                     'description': 'Token expired.'
                 }, 401)
-            #Token error in audience or issuer
+            # Token error in audience or issuer
             except jwt.JWTClaimsError:
                 raise AuthError({
                     'code': 'invalid_claims',
                     'description': 'Incorrect claims. Please, check the audience and issuer.'
                 }, 401)
-            #Catch any other exceptions that arise
+            # Catch any other exceptions that arise
             except Exception as e:
                 traceback.print_exc()
                 raise AuthError({
                     'code': 'invalid_header',
                     'description': 'Unable to parse authentication token.'
                 }, 400)
-        #If no RSA key raise an auth error
+        # If no RSA key raise an auth error
         raise AuthError({
-                    'code': 'invalid_header',
+            'code': 'invalid_header',
                     'description': 'Unable to find the appropriate key.'
-                }, 400)
-    #Traceback is helping in debugging during dev
+        }, 400)
+    # Traceback is helping in debugging during dev
     except Exception as e:
         traceback.print_exc()
 
+
 '''
-The @requires_auth(permission) decorator method is used to check permissions before preforming 
-certain acitons of the api.  It calls the get_token_auth_header, verify_decode_jwt, and check_permissions 
-methods to authorize particular actions.  
+The @requires_auth(permission) decorator method is used to check permissions before preforming
+certain acitons of the api.  It calls the get_token_auth_header, verify_decode_jwt, and check_permissions
+methods to authorize particular actions.
 
 Calling:
     @requires_auth(permission)
@@ -233,6 +242,8 @@ Known errors:
 
 #         return wrapper
 #     return requires_auth_decorator
+
+
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)

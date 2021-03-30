@@ -7,22 +7,22 @@ from app import create_app
 from models import setup_db, Movies, Actor, db_drop_and_create_all
 import configparser
 
-config=configparser.ConfigParser()
+config = configparser.ConfigParser()
 config.read('config.ini')
 
-#tokens for testing
-casting_assistant_token=config["bearer_tokens"]['casting_assistant'] 
-casting_director_token=config["bearer_tokens"]['casting_director']
-executive_producer_token=config["bearer_tokens"]['executive_producer']
+# tokens for testing
+casting_assistant_token = config["bearer_tokens"]['casting_assistant']
+casting_director_token = config["bearer_tokens"]['casting_director']
+executive_producer_token = config["bearer_tokens"]['executive_producer']
 
-database_name = os.getenv('DATABASE_NAME',default='test_agency_db')
-db_user = os.getenv('DB_USER',default='postgres')
-db_pass = os.getenv('DB_PASS',default=None)
+database_name = os.getenv('DATABASE_NAME', default='test_agency_db')
+db_user = os.getenv('DB_USER', default='postgres')
+db_pass = os.getenv('DB_PASS', default=None)
 db_host = os.getenv('DB_HOST', default='localhost')
-port = os.getenv('PORT',default=5432)
+port = os.getenv('PORT', default=5432)
 database_path = os.getenv(
-    'DATABASE_URL',default="postgres://{}:{}@{}:{}/{}".format(
-        db_user,db_pass,db_host, port, database_name))
+    'DATABASE_URL', default="postgres://{}:{}@{}:{}/{}".format(
+        db_user, db_pass, db_host, port, database_name))
 
 
 class CastingAgencyTestCase(unittest.TestCase):
@@ -30,9 +30,9 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.casting_assistant_token=config["bearer_tokens"]['casting_assistant'] 
-        self.casting_director_token=config["bearer_tokens"]['casting_director']
-        self.executive_producer_token=config["bearer_tokens"]['executive_producer']
+        self.casting_assistant_token = config["bearer_tokens"]['casting_assistant']
+        self.casting_director_token = config["bearer_tokens"]['casting_director']
+        self.executive_producer_token = config["bearer_tokens"]['executive_producer']
         self.app = create_app()
         self.client = self.app.test_client
         setup_db(self.app)
@@ -87,7 +87,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         """Test for GET / (health endpoint)"""
         res = self.client().get('/')
         data = json.loads(res.data)
-        
+
         self.assertEqual(res.status_code, 200)
         self.assertIn('health', data)
         self.assertEqual(data['health'], 'Running!!')
@@ -138,7 +138,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_404_get_actors_by_id(self):
         """Failing Test for GET /actors/<actor_id>"""
-        # this should fail because the actor is not in the db 
+        # this should fail because the actor is not in the db
         res = self.client().get('/actors/1', headers={
             'Authorization': "Bearer {}".format(casting_director_token)
         })
@@ -174,7 +174,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_422_create_actor(self):
         """Failing Test for POST /actors"""
-        #failing test due to inserting invalid data --testing 422 
+        # failing test due to inserting invalid data --testing 422
         res = self.client().post('/actors', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         }, json=self.INVALID_NEW_ACTOR)
@@ -186,11 +186,11 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_update_actor_info(self):
         """Passing Test for PATCH /actors/<actor_id>"""
-        #insert a record before updating the record
+        # insert a record before updating the record
         res = self.client().post('/actors', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         }, json=self.VALID_NEW_ACTOR)
-        #patch method on the actor recrod just inserted
+        # patch method on the actor recrod just inserted
         res = self.client().patch('/actors/1', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         }, json=self.VALID_UPDATE_ACTOR)
@@ -204,7 +204,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_422_update_actor_info(self):
         """Failing Test for PATCH /actors/<actor_id>"""
-        #insert a record before updating the record
+        # insert a record before updating the record
         res = self.client().post('/actors', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         }, json=self.VALID_NEW_ACTOR)
@@ -220,7 +220,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_delete_actor_with_casting_assistant_token(self):
         """Failing Test for DELETE /actors/<actor_id>"""
-        #insert a record before deleting the record
+        # insert a record before deleting the record
         res = self.client().post('/actors', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         }, json=self.VALID_NEW_ACTOR)
@@ -236,7 +236,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_delete_actor(self):
         """Passing Test for DELETE /actors/<actor_id>"""
-        #insert a record before deleting the record
+        # insert a record before deleting the record
         res = self.client().post('/actors', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         }, json=self.VALID_NEW_ACTOR)
@@ -264,7 +264,8 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_movies(self):
         """Passing Test for GET /movies"""
-        # insert a movie so there is one to be found -- need executive producer token
+        # insert a movie so there is one to be found -- need executive producer
+        # token
         res = self.client().post('/movies', headers={
             'Authorization': "Bearer {}".format(self.executive_producer_token)
         }, json=self.VALID_NEW_MOVIE)
@@ -282,7 +283,8 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_movie_by_id(self):
         """Passing Test for GET /movies/<movie_id>"""
-        # insert a movie so there is one to be found -- need executive producer token
+        # insert a movie so there is one to be found -- need executive producer
+        # token
         res = self.client().post('/movies', headers={
             'Authorization': "Bearer {}".format(self.executive_producer_token)
         }, json=self.VALID_NEW_MOVIE)
@@ -348,7 +350,8 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_update_movie_info(self):
         """Passing Test for PATCH /movies/<movie_id>"""
-        # add movie to update -- this functionality requires the executive producer token
+        # add movie to update -- this functionality requires the executive
+        # producer token
         res = self.client().post('/movies', headers={
             'Authorization': "Bearer {}".format(self.executive_producer_token)
         }, json=self.VALID_NEW_MOVIE)
@@ -366,7 +369,8 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_422_update_movie_info(self):
         """Failing Test for PATCH /movies/<movie_id>"""
-        # add movie to update -- this functionality requires the executive producer token
+        # add movie to update -- this functionality requires the executive
+        # producer token
         res = self.client().post('/movies', headers={
             'Authorization': "Bearer {}".format(self.executive_producer_token)
         }, json=self.VALID_NEW_MOVIE)
@@ -383,7 +387,8 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_delete_movie_with_casting_director_token(self):
         """Failing Test for DELETE /movies/<movie_id>"""
-        #this should fail with 401 because the executive producer only has this priviledge
+        # this should fail with 401 because the executive producer only has
+        # this priviledge
         res = self.client().delete('/movies/3', headers={
             'Authorization': "Bearer {}".format(self.casting_director_token)
         })
@@ -395,7 +400,8 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_delete_movie(self):
         """Passing Test for DELETE /movies/<movie_id>"""
-        # add movie to update -- this functionality requires the executive producer token
+        # add movie to update -- this functionality requires the executive
+        # producer token
         res = self.client().post('/movies', headers={
             'Authorization': "Bearer {}".format(self.executive_producer_token)
         }, json=self.VALID_NEW_MOVIE)
