@@ -1,7 +1,0 @@
-curl --request POST \
-  --url 'https://fsnd-project3-borbert.us.auth0.com/oauth/token' \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data grant_type=client_credentials \
-  --data 'client_id=isMFqFWQKYZvMCGfXKDphW0aP3eGWx09' \
-  --data client_secret=V7mO2DVhtggqcMY-Jufn-xT_MNaxqNIkKYN4iV_bzTqYqeC6gbQ8zsM1e4biJoaf \
-  --data audience=http://127.0.0.1:5000

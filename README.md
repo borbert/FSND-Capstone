@@ -13,9 +13,14 @@ Auth0 information for endpoints that require authentication can be found in `set
 
 # Running tests
 
-To run the unittests, first CD into the FSND-Capstone folder and run the following command:
+To run the unittests, first CD into the FSND-Capstone folder (testing locally) and run the following command:
 ```
 python test_app.py
+```
+
+If running tests against the heroku deployment use the provided postman collection. 
+```
+capstone testing collection.postman_collection.json
 ```
 
 # API Documentation
