@@ -73,10 +73,12 @@ export FLASK_ENV=development # enables debug mode
 
 #### Running the development server
 You can run the development server by running:
-```python app.py
+```
+python app.py
 ```
 OR
-```flask run --reload
+```
+flask run --reload
 ```
 
 # Running the API
